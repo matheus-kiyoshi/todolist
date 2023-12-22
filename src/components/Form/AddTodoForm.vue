@@ -1,12 +1,42 @@
 <template>
-  <form action="">
-    <input type="text">
+  <form @submit.prevent="addTodo()">
+    <input type="text" v-model="inputText" :placeholder="placeholderCount">
     <button type="submit">Add Todo</button>
   </form>
 </template>
 
 <script>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+
 export default {
+  setup() {
+    const store = useStore()
+
+    const inputText = ref('');
+
+    const placeholderTexts = [
+      'Add a new todo...',
+      'What do you need to do?',
+      'What is your next task?',
+      'What is your next goal?',
+      'What is your next objective?',
+      'What is your next mission?',
+      'What is your next aim?',
+    ]
+
+    const placeholderCount = ref(placeholderTexts[Math.floor(Math.random() * placeholderTexts.length)])
+    
+    return {
+      inputText,
+      addTodo: () => {
+        store.dispatch('addTodo', inputText.value)
+        inputText.value = ''
+        placeholderCount.value = placeholderTexts[Math.floor(Math.random() * placeholderTexts.length)]
+      },
+      placeholderCount
+    }
+  }
 }
 </script>
 

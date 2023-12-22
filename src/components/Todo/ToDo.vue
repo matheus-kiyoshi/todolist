@@ -5,7 +5,7 @@
       <div class="checkmark"></div>
     </label>
     <span :class="marked()">{{ todoData.title }}</span>
-    <button @click="deleteTodo()">Delete</button>
+    <button @click="removeTodo()">Delete</button>
   </div>
 </template>
 
@@ -18,14 +18,14 @@ export default {
       return props.todo.completed ? 'uns' : ''
     }
 
-    const deleteTodo = () => {
-      emit('delete-todo', props.todo.id)
+    const removeTodo = () => {
+      emit('remove-todo', props.todo.id)
     }
 
     return {  
       todoData: props.todo,
       marked,
-      deleteTodo
+      removeTodo
     }
   }
 }

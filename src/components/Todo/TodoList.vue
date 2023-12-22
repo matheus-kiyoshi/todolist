@@ -1,43 +1,24 @@
 <template>
-  <div class="todo__wrap">
-    <TodoComponent v-for="todo in todos" :key="todo.id" :todo="todo" @delete-todo="deleteTodo" />
+  <div class="todo__wrap" v-if="todos.length > 0">
+    <TodoComponent v-for="todo in todos" :key="todo.id" :todo="todo" @remove-todo="removeTodo" />
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import TodoComponent from './ToDo.vue'
+import { useStore } from 'vuex'
 
 export default {
   components: {
     TodoComponent
   },
   setup() {
-    const todos = ref([
-      {
-        id: 1,
-        title: 'Todo 1',
-        completed: true
-      },
-      {
-        id: 2,
-        title: 'Todo 2',
-        completed: false
-      },
-      {
-        id: 3,
-        title: 'Todo 3',
-        completed: false
-      }
-    ])
-
-    const deleteTodo = (id) => {
-      todos.value = todos.value.filter(todo => todo.id !== id)
-    }
+    const store = useStore()
 
     return {
-      todos,
-      deleteTodo
+      todos: computed(() => store.state.todos),
+      removeTodo: (id) => store.dispatch('removeTodo', id)
     }
   }
 }
@@ -48,5 +29,34 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  border-radius: 16px;
+  padding: 12px;
+  background-color: rgba(216, 105, 65, 0.356);
+  max-height: 412px;
+  overflow-y: auto;
+}
+
+/* scrollbar */
+
+.todo__wrap::-webkit-scrollbar {
+  width: 6px;
+}
+
+.todo__wrap {
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+  scrollbar-color: rgb(209, 149, 19) transparent;
+}
+
+.todo__wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.todo__wrap::-webkit-scrollbar-thumb {
+  background: rgb(204, 152, 10);
+}
+
+.todo__wrap::-webkit-scrollbar-thumb:hover {
+  background: rgb(185, 111, 0);
 }
 </style>
